@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UsuarioModule } from './usuario/usuario.module';
+import { userEntities } from '../constants/entities';
 
 @Module({
   imports: [
@@ -18,10 +20,12 @@ import { ConfigModule } from '@nestjs/config';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [],
+        entities: [...userEntities],
         synchronize: true,
+        dropSchema: true
       }),
     }),
+    UsuarioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
