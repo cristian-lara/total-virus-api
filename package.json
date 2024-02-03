@@ -2,7 +2,9 @@
   "name": "@app-secure-check/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build:docker": "nx build backend --prod"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^10.0.2",
