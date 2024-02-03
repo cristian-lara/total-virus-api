@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: 7V2f9W8LqA83Eqr # Reemplaza con la contraseña para upsSeguridad
       MYSQL_DATABASE: virustotal
     ports:
-      - "3001:3306"
+      - "30001:3306"
     volumes:
       - my-db:/var/lib/mysql
 
