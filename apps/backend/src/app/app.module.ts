@@ -4,8 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UsuarioModule } from './usuario/usuario.module';
-import { userEntities } from '../constants/entities';
+import { ReportVirusModule } from './report-virus/report-virus.module';
+import { UserModule } from './user/user.module';
+import { reportVirusEntities, userEntities } from '../constants/constants';
 
 @Module({
   imports: [
@@ -14,18 +15,20 @@ import { userEntities } from '../constants/entities';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: process.env.DB_TYPE as 'mysql',
+        type: 'postgres',
         host: process.env.DB_HOST,
         port: +process.env.DB_PORT,
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [...userEntities],
+        entities: [...userEntities, ...reportVirusEntities],
         synchronize: true,
-        dropSchema: true
+        dropSchema: true,
+        logging: true,
       }),
     }),
-    UsuarioModule,
+    ReportVirusModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

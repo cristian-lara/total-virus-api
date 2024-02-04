@@ -2,17 +2,16 @@ version: '3.7'
 
 services:
   db:
-    image: mysql:5.7
+    image: postgres:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 7V2f9W8LqA83Eqr # Reemplaza con tu contraseña segura
-      MYSQL_USER: upsSeguridad # Reemplaza con tu nombre de usuario
-      MYSQL_PASSWORD: 7V2f9W8LqA83Eqr # Reemplaza con la contraseña para upsSeguridad
-      MYSQL_DATABASE: virustotal
+      POSTGRES_DB: virustotal
+      POSTGRES_USER: upsSeguridad
+      POSTGRES_PASSWORD: 7V2f9W8LqA83Eqr
     ports:
-      - "30001:3306"
+      - "30001:5432"
     volumes:
-      - my-db:/var/lib/mysql
+      - my-db:/var/lib/postgresql/data
 
 volumes:
   my-db:

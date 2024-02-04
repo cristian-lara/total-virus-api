@@ -1,5 +1,6 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../util/base.entity';
+import { ReportVirusEntity } from '../report-virus/report-virus.entity';
 
 @Entity({name: 'User'})
 export class UserEntity extends BaseEntity {
@@ -8,5 +9,8 @@ export class UserEntity extends BaseEntity {
 
   @Column({ unique: true, type:'varchar', name:'email' })
   email: string;
+
+  @OneToMany(() => ReportVirusEntity, reportVirus => reportVirus.user)
+  reportViruses: ReportVirusEntity[];
 
 }
