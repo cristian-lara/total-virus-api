@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ReportVirusModule } from './report-virus/report-virus.module';
 import { UserModule } from './user/user.module';
 import { reportVirusEntities, userEntities } from '../constants/constants';
+import { HttpModule } from '@nestjs/axios';
+import { VirusTotalModule } from './virus-total/virus-total.module';
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { reportVirusEntities, userEntities } from '../constants/constants';
     }),
     ReportVirusModule,
     UserModule,
+    VirusTotalModule,
   ],
   controllers: [AppController],
   providers: [AppService],
