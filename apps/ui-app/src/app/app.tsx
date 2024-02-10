@@ -7,12 +7,15 @@ import Home from "./home/page";
 import Footer from "./components/footer/footer";
 import Sidebar from './components/side-bar/side-bar';
 import NotFound from './not-found/page';
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient()
 
 export function App() {
   return (
-    <>
-      <CssBaseline />
+    <QueryClientProvider client={queryClient}>
+    <CssBaseline />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Sidebar/>
         <div style={{ flex: 1 }}>
@@ -26,7 +29,8 @@ export function App() {
         </div>
         <Footer />
       </div>
-    </>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
