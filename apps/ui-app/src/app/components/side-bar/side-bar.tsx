@@ -29,12 +29,12 @@ const Sidebar = () => {
         <Divider />
         {isAuthenticated ? (
           <List>
-            <ListItem button component={Link} to="/perform-report">
+            <ListItem button component={Link} to="/perform-report" onClick={()=> setIsOpen(false)}>
               <ListItemIcon><ReportIcon /></ListItemIcon>
               <ListItemText primary="Perform Report" />
             </ListItem>
 
-            <ListItem button component={Link} to="/consult-analisys">
+            <ListItem button component={Link} to="/consult-analisys" onClick={()=> setIsOpen(false)}>
               <ListItemIcon><AnalysisIcon /></ListItemIcon>
               <ListItemText primary="Consult Analysis" />
             </ListItem>
