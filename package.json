@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:docker": "nx build backend --prod"
+    "build:docker": "nx reset && nx build backend --prod",
+    "build:image": "sh -c 'docker build -t seguridad:$VERSION .'"
   },
   "private": true,
   "dependencies": {

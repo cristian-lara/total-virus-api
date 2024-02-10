@@ -8,7 +8,7 @@ interface ScanData {
 interface ReportData {
   idAnalysis: string;
 }
-const urlBackend = 'http://localhost:3002'
+const urlBackend = 'http://186.101.189.34:8085'
 
 const scanUrl = async (data: ScanData): Promise<any> => {
   const { url } = data;

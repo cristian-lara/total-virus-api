@@ -30,6 +30,8 @@ RUN npm install -g pnpm
 COPY --from=build /total-virus-api/dist/apps/backend ./dist
 COPY package*.json ./
 COPY pnpm-lock.yaml ./
+COPY .env ./
+
 
 # Instalar solo las dependencias de producción
 RUN pnpm install --prod
