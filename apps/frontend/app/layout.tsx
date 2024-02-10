@@ -10,7 +10,6 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      <SidebarMenu />
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <Box component="header" sx={{ width: '100%', p: 1 }}>
           <Typography variant="h1">Header</Typography>
