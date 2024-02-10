@@ -6,6 +6,5 @@ export interface PerformReportProps {}
 
 export default function PerformReport(props: PerformReportProps) {
   return (
-   <Grid container></Grid>
-  );
+<h1>holaa</h1>  );
 }

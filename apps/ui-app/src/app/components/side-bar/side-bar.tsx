@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import AuthenticationButton from '../AuthenticationButton';
 /* eslint-disable-next-line */
-const Sidebar = () => {
+const Sidebar = ({openSideBar}: {openSideBar: boolean}) => {
   const [isOpen, setIsOpen] = useState(false);
   const {user, isAuthenticated}= useAuth0()
 
