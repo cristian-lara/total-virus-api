@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import AuthenticationButton from '../AuthenticationButton';
 /* eslint-disable-next-line */
-const Sidebar = ({openSideBar}: {openSideBar: boolean}) => {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {user, isAuthenticated}= useAuth0()
 
@@ -29,12 +29,12 @@ const Sidebar = ({openSideBar}: {openSideBar: boolean}) => {
         <Divider />
         {isAuthenticated ? (
           <List>
-            <ListItem button component={Link} to="/perform-report">
+            <ListItem button component={Link} to="/perform-report" onClick={()=> setIsOpen(false)}>
               <ListItemIcon><ReportIcon /></ListItemIcon>
               <ListItemText primary="Perform Report" />
             </ListItem>
 
-            <ListItem button component={Link} to="/consult-analisys">
+            <ListItem button component={Link} to="/consult-analisys" onClick={()=> setIsOpen(false)}>
               <ListItemIcon><AnalysisIcon /></ListItemIcon>
               <ListItemText primary="Consult Analysis" />
             </ListItem>

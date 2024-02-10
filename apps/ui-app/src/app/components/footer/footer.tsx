@@ -9,13 +9,15 @@ const Footer: React.FC = () => {
     <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
       <Container maxWidth="lg">
         <Typography variant="body1" align="center">
-          Mi Aplicación React
+         Developed by CRISTIAN LARA
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center">
-          {'© '}
-          <Link color="inherit" href="https://yourwebsite.com/">
-            Your Website
-          </Link>{' '}
+          {'© POWERED by '}
+          <Link  color="inherit" href="https://mui.com/" target="_blank" rel="noopener noreferrer">
+            Material UI
+          </Link> & <Link color="inherit" href="https://es.vitejs.dev/guide/" target="_blank" rel="noopener noreferrer">
+          VITE
+        </Link>{' '}
           {new Date().getFullYear()}
           {'.'}
         </Typography>

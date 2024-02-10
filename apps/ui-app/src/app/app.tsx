@@ -10,12 +10,11 @@ import NotFound from './not-found/page';
 import { useState } from 'react';
 
 export function App() {
-  const [openSideBar, setOpenSideBar] = useState(false);
   return (
     <>
       <CssBaseline />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Sidebar openSideBar={openSideBar} />
+        <Sidebar/>
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/perform-report" element={<ProtectedRoute component={PerformReport} />} />
@@ -28,7 +27,6 @@ export function App() {
         <Footer />
       </div>
     </>
-
   );
 }
 
