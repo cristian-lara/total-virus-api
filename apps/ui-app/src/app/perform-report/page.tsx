@@ -2,6 +2,7 @@ import { Box, Container, Grid, Paper, Tab, Tabs, Typography, useMediaQuery, useT
 import TabPanel from '../components/tab-panel/tab-panel';
 import React, { useState } from 'react';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import SearchSection from '../components/search-section/search-section';
 
 
 /* eslint-disable-next-line */
@@ -56,7 +57,6 @@ export default function PerformReport(props: PerformReportProps) {
         </Box>
       </Paper>
       <Box sx={{ width: '100%', padding: isMobile ? 1 : '24px', mt: 5, bgcolor: 'background.paper' }}>
-        {/* Tabs aquí */}
         <Box sx={tabStyle}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
             <Tab label="URL" />
@@ -64,10 +64,10 @@ export default function PerformReport(props: PerformReportProps) {
             <Tab label="File" />
           </Tabs>
         </Box>
-        {/* Contenido de las tabs aquí */}
+
         <Box sx={contentStyle}>
           <TabPanel value={value} index={0}>
-            Content for URL tab
+            <SearchSection/>
           </TabPanel>
           <TabPanel value={value} index={1}>
             Content for Search tab
