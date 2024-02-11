@@ -51,3 +51,8 @@ export const saveReportVirus = async (reportDetails: IReportVirusData) => {
     throw error;
   }
 };
+
+export const fetchReportsByUser = async (userId: string): Promise<IReportVirusData[]> => {
+  const { data } = await axios.get(`${urlBackend}/api/report-virus/user/${userId}`);
+  return data;
+};

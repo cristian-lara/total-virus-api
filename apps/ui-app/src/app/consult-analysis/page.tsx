@@ -16,20 +16,22 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Collapse, Box
+  Collapse, Box, CircularProgress
 } from '@mui/material';
 import React, { useState } from 'react';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { KeyboardArrowUp as KeyboardArrowUpIcon, KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
+import { useQuery } from 'react-query';
+import { IReportVirusData } from '../constants';
+import { fetchReportsByUser } from '../query/url.query';
+import { useUser } from '../components/UserContext';
+import SearchSection from '../components/search-section/search-section';
+import CardAnalysisDetails from '../components/card-analisys-details/card-analisys-details';
 
 /* eslint-disable-next-line */
-type DataRow = {
-  id: number;
-  type: 'URL' | 'FILE' | 'WEB';
-  createdAt: string;
-};
 
-const Row: React.FC<{ row: DataRow }> = ({ row }) => {
+
+const Row: React.FC<{ row: IReportVirusData }> = ({ row }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -57,7 +59,7 @@ const Row: React.FC<{ row: DataRow }> = ({ row }) => {
                 Additional Details
               </Typography>
               {/* Here you can place additional row details */}
-              <Typography>Info adicional</Typography>
+            <CardAnalysisDetails reportData={row.reportDetail} />
             </Box>
           </Collapse>
         </TableCell>
@@ -70,20 +72,28 @@ export default function ConsultAnalysis() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [open, setOpen] = useState(false);
+  const { user } = useUser();
 
   // Pagination state
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const { data: rows, isLoading, isError, error } = useQuery<IReportVirusData[], Error>(
+    ['reportsByUser', user?.id],
+    () => fetchReportsByUser(user?.id as string),
+    {
+      refetchInterval: 1000 * 60 * 5, // e.g., refetch every 5 minutes
+    }
+  );
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (isError) {
+    return <span>Error: {error?.message}</span>;
+  }
   // Example rows data
-  const rows: DataRow[] = [
-    { id: 1, type: 'URL', createdAt: '2022-07-21' },
-    { id: 2, type: 'WEB', createdAt: '2022-07-21' },
-    { id: 3, type: 'URL', createdAt: '2022-07-21' },
-    { id: 4, type: 'FILE', createdAt: '2022-07-21' },
-    { id: 5, type: 'URL', createdAt: '2022-07-21' },
-    // ... more rows
-  ];
 
   // Handle pagination change
   const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -114,32 +124,34 @@ export default function ConsultAnalysis() {
           }} />
         </Grid>
       </Grid>
+      {rows && rows.length > 0 && (
+        <TableContainer component={Paper}>
+          <Table size={isMobile ? 'small' : 'medium'} aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Type</TableCell>
+                <TableCell>Created At</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                <Row key={row.id} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+      )}
 
-      <TableContainer component={Paper}>
-        <Table size={isMobile ? 'small' : 'medium'} aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Type</TableCell>
-              <TableCell>Created At</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <Row key={row.id} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
     </Container>
   );
 };

@@ -6,4 +6,6 @@ export interface IReportVirusData {
   type: VirusReportType;
   reportDetail: ReportData;
   user: string;
+  id?: string;
+  createdAt?: string
 }
