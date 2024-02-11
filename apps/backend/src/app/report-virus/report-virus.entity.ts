@@ -13,6 +13,11 @@ export class ReportVirusEntity extends BaseEntity {
   type: VirusReportType;
 
   @Column({
+    type: 'varchar',
+  })
+  urlSearch: string;
+
+  @Column({
     type: 'jsonb',
     name: 'report_detail',
     nullable: false

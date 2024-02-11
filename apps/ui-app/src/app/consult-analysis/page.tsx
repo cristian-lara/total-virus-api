@@ -49,6 +49,7 @@ const Row: React.FC<{ row: IReportVirusData }> = ({ row }) => {
         <TableCell component="th" scope="row">
           {row.type}
         </TableCell>
+        <TableCell>{row.urlSearch}</TableCell>
         <TableCell>{row.createdAt}</TableCell>
       </TableRow>
       <TableRow>
@@ -131,6 +132,7 @@ export default function ConsultAnalysis() {
               <TableRow>
                 <TableCell />
                 <TableCell>Type</TableCell>
+                <TableCell>Input value</TableCell>
                 <TableCell>Created At</TableCell>
               </TableRow>
             </TableHead>

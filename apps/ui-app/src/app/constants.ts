@@ -7,5 +7,6 @@ export interface IReportVirusData {
   reportDetail: ReportData;
   user: string;
   id?: string;
-  createdAt?: string
+  createdAt?: string;
+  urlSearch: string;
 }

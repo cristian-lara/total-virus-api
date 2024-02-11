@@ -5,11 +5,13 @@ import { ReportVirusEntity } from './report-virus.entity';
 export class CreateReportVirusDto {
   type: VirusReportType;
   reportDetail: any;
+  urlSearch: string
 }
 
 export class UpdateReportVirusDto {
   type?: VirusReportType;
   reportDetail?: any;
+  urlSearch?: string;
 }
 
 @Controller('report-virus')

@@ -60,7 +60,8 @@ export default function SearchSection() {
     const dataReport: IReportVirusData = {
       reportDetail: reportDetails,
       type: 'URL',
-      user: user?.id as string
+      user: user?.id as string,
+      urlSearch: searchTerm
     };
     saveReportMutation.mutate(dataReport);
   };
