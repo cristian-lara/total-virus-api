@@ -5,29 +5,32 @@ import { Navigate } from 'react-router-dom';
 import AuthenticationButton from './AuthenticationButton';
 import { useQueryClient } from 'react-query';
 import { findOrCreateUser } from '../query/url.query';
+import { useUser } from './UserContext';
 
 
 const ProtectedRoute = ({ component: Component }: {  component: ComponentType<any>;
 }) => {
-  const { isAuthenticated, isLoading, user } = useAuth0();
+  const { isAuthenticated, isLoading, user: auth0User } = useAuth0();
   const queryClient = useQueryClient();
+  const { setUser } = useUser();
+
 
   const getUserData = async () => {
     try {
-      const { sub, email } = user as User;
-      queryClient.setQueryData('userData', await findOrCreateUser(sub as string, email as string));
+      if(auth0User){
+        const userData = await findOrCreateUser(auth0User.sub as string, auth0User.email as string);
+        setUser(userData);
+      }
     } catch (error) {
-      console.error('Save user failed')
+      console.error('Save user failed');
     }
   };
+
   useEffect(() => {
-
-
-    if (isAuthenticated && user) {
-      console.log('user f', user)
+    if (isAuthenticated && auth0User) {
       getUserData();
     }
-  }, [isAuthenticated, user, queryClient,]);
+  }, [isAuthenticated, auth0User, setUser, queryClient]);
 
   if (isLoading) {
     return     (

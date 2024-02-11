@@ -2,11 +2,13 @@ import { Box, Button, Collapse, Grid, Paper, TextField, Typography } from '@mui/
 import { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useGetUrlReport, useScanUrl } from '../../query/url.query';
-import { useQueryClient } from 'react-query';
+import { saveReportVirus, useGetUrlReport, useScanUrl } from '../../query/url.query';
+import { useMutation, useQueryClient } from 'react-query';
 import CardAnalysisDetails, { ReportData } from '../card-analisys-details/card-analisys-details';
 import SaveIcon from '@mui/icons-material/Save';
-
+import { IReportVirusData } from '../../constants';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useUser } from '../UserContext';
 
 
 /* eslint-disable-next-line */
@@ -16,11 +18,22 @@ export default function SearchSection() {
   const [idAnalysis, setIdAnalysis] = useState('');
   const [messageRequest, setMessageRequest] = useState('');
 
+  const { user } = useUser();
   const scanMutation = useScanUrl();
   const queryClient = useQueryClient();
 
   const reportQuery = useGetUrlReport(idAnalysis, !!idAnalysis);
 
+  const saveReportMutation = useMutation(saveReportVirus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reportQueryKey');
+      setSearchTerm('');
+
+    },
+    onError: (error) => {
+      console.error('Error saving the report:', error);
+    }
+  });
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -35,7 +48,7 @@ export default function SearchSection() {
       onError: (error) => {
         console.error(error);
         setMessageRequest('Analysis was not completed, please enter a valid URL');
-      },
+      }
     });
   };
 
@@ -44,7 +57,12 @@ export default function SearchSection() {
   };
 
   const handleSaveReport = (reportDetails: ReportData) => {
-    console.log('Report saved', reportDetails);
+    const dataReport: IReportVirusData = {
+      reportDetail: reportDetails,
+      type: 'URL',
+      userId: user?.id as string
+    };
+    saveReportMutation.mutate(dataReport);
   };
 
   return (
@@ -78,7 +96,7 @@ export default function SearchSection() {
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!reportQuery.data || !reportQuery.data.data || !reportQuery.data.data.attributes}
+                disabled={(!reportQuery.data || (!reportQuery.data.data && !reportQuery.data.data.attributes)) || searchTerm === '' }
                 startIcon={<SaveIcon />}
                 onClick={() => handleSaveReport(reportQuery.data.data.attributes)}
               >

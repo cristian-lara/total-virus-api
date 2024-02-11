@@ -50,7 +50,7 @@ export default function PerformReport(props: PerformReportProps) {
               <AssessmentIcon sx={{
                 fontSize: '4.5rem',
                 color: 'action.active',
-                verticalAlign: 'bottom', // Alinea el ícono con el texto
+                verticalAlign: 'bottom',
               }} />
             </Grid>
           </Grid>
@@ -60,8 +60,8 @@ export default function PerformReport(props: PerformReportProps) {
         <Box sx={tabStyle}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
             <Tab label="URL" />
-            <Tab label="Search" />
-            <Tab label="File" />
+            <Tab disabled={true} label="Search" />
+            <Tab disabled={true}  label="File" />
           </Tabs>
         </Box>
 
@@ -69,7 +69,7 @@ export default function PerformReport(props: PerformReportProps) {
           <TabPanel value={value} index={0}>
             <SearchSection/>
           </TabPanel>
-          <TabPanel value={value} index={1}>
+          <TabPanel  value={value} index={1}>
             Content for Search tab
           </TabPanel>
           <TabPanel value={value} index={2}>

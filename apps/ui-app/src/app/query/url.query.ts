@@ -1,5 +1,6 @@
 import { useMutation, useQuery, UseMutationResult, UseQueryResult } from 'react-query';
 import axios from 'axios';
+import { IReportVirusData } from '../constants';
 
 interface ScanData {
   url: string;
@@ -38,4 +39,15 @@ export const useGetUrlReport = (idAnalysis: string, isEnabled: boolean): UseQuer
   return useQuery(['report', idAnalysis], () => getUrlReport(idAnalysis), {
     enabled: isEnabled,
   });
+};
+
+
+export const saveReportVirus = async (reportDetails: IReportVirusData) => {
+  try {
+    const response = await axios.post(`${urlBackend}/api/report-virus`, reportDetails);
+    return response.data;
+  } catch (error) {
+    console.error('Error saving the report:', error);
+    throw error;
+  }
 };
