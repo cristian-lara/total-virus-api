@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import { reportVirusEntities, userEntities } from '../constants/constants';
 import { HttpModule } from '@nestjs/axios';
 import { VirusTotalModule } from './virus-total/virus-total.module';
+import { UserEntity } from './user/user.entity';
+import { ReportVirusEntity } from './report-virus/report-virus.entity';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { VirusTotalModule } from './virus-total/virus-total.module';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [...userEntities, ...reportVirusEntities],
+        entities: [UserEntity, ReportVirusEntity],
         synchronize: true,
         dropSchema: true,
         logging: true,

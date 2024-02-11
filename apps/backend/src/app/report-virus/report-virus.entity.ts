@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { VirusReportType } from '../../constants/constants';
 import { BaseEntity } from '../../util/base.entity';
 import { UserEntity } from '../user/user.entity';

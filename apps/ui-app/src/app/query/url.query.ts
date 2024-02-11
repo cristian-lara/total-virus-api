@@ -8,7 +8,8 @@ interface ScanData {
 interface ReportData {
   idAnalysis: string;
 }
-const urlBackend = 'http://186.101.189.34:8085'
+const urlBackend = 'http://localhost:3002'
+// const urlBackend = 'http://186.101.189.34:8085'
 
 const scanUrl = async (data: ScanData): Promise<any> => {
   const { url } = data;
@@ -23,6 +24,14 @@ const getUrlReport = async (idAnalysis: string): Promise<any> => {
 
 export const useScanUrl = (): UseMutationResult<any, unknown, ScanData, unknown> => {
   return useMutation(scanUrl);
+};
+
+export const findOrCreateUser = async (idAuth0: string, email:string) => {
+  const response = await axios.post(urlBackend+'/api/user/find-or-create', {
+    idAuth0,
+    email,
+  });
+  return response.data;
 };
 
 export const useGetUrlReport = (idAnalysis: string, isEnabled: boolean): UseQueryResult<any, unknown> => {
