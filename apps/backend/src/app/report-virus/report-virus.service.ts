@@ -38,4 +38,11 @@ export class ReportVirusService {
   async remove(id: string): Promise<void> {
     await this.reportVirusRepository.delete(id);
   }
+
+  async findAllByUserId(userId: string): Promise<ReportVirusEntity[]> {
+    return this.reportVirusRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'], // Asegúrate de cargar las relaciones si es necesario
+    });
+  }
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { ReportVirusService } from './report-virus.service';
 import { VirusReportType } from '../../constants/constants';
+import { ReportVirusEntity } from './report-virus.entity';
 export class CreateReportVirusDto {
   type: VirusReportType;
   reportDetail: any;
@@ -38,5 +39,10 @@ export class ReportVirusController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.reportVirusService.remove(id);
+  }
+
+  @Get('/user/:userId')
+  findAllByUserId(@Param('userId') userId: string): Promise<ReportVirusEntity[]> {
+    return this.reportVirusService.findAllByUserId(userId);
   }
 }

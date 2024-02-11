@@ -5,5 +5,5 @@ type VirusReportType = 'URL' | 'FILE' | 'WEB';
 export interface IReportVirusData {
   type: VirusReportType;
   reportDetail: ReportData;
-  userId: string;
+  user: string;
 }
