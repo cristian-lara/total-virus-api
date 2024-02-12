@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { catchError, firstValueFrom, pipe } from 'rxjs';
+import FormData from 'form-data';
 
 @Injectable()
 export class VirusTotalService {
@@ -98,28 +99,50 @@ export class VirusTotalService {
   }
 
   // FILE
-  async uploadFile(file: any): Promise<AxiosResponse> {
-    const url = `${this.baseURL}/files`;
+  async uploadFile(file: { fieldname: string,
+    originalname: string,
+    encoding: string,
+    mimetype: string,
+  buffer: Buffer}): Promise<AxiosResponse> {
+    const urlEndpoint = `${this.baseURL}/files`;
     const formData = new FormData();
-    formData.append('file', file);
-    return this.httpService.post(url, formData, {
-      headers: {
-        ...this.getRequestHeaders().headers,
-        'Content-Type': 'multipart/form-data'
-      }
-    }).toPromise();
+    formData.append('file', file.buffer, {
+      filename: file.originalname,
+      contentType: file.mimetype,
+    });
+    const {data} = await firstValueFrom(
+      this.httpService.post(urlEndpoint, formData,{
+        headers: {
+          ...this.getRequestHeaders().headers,
+          'Content-Type': 'multipart/form-data'
+        }
+      }).pipe(catchError((error: AxiosError) => {
+        console.error(error.response.data);
+        throw 'An error happened!';
+      }),)
+    )
+    return data;
   }
-
   async getUploadUrlForLargeFiles(): Promise<AxiosResponse> {
     const url = `${this.baseURL}/files/upload_url`;
     return this.httpService.get(url, this.getRequestHeaders()).toPromise();
   }
 
   async getFileReport(fileId: string): Promise<AxiosResponse> {
-    const url = `${this.baseURL}/files/${fileId}`;
-    return this.httpService.get(url, this.getRequestHeaders()).toPromise();
+    const urlEndpoint = `${this.baseURL}/analyses/${fileId}`;
+    const {data} = await firstValueFrom(
+      this.httpService.get(urlEndpoint, {
+        headers: {
+          ...this.getRequestHeaders().headers,
+          'Content-Type': 'application/json'
+        }
+      }).pipe(catchError((error: AxiosError) => {
+        console.error(error.response.data);
+        throw 'An error happened!';
+      }),)
+    )
+    return data;
   }
-
   async requestFileRescan(fileId: string): Promise<AxiosResponse> {
     const url = `${this.baseURL}/files/${fileId}/analyse`;
     return this.httpService.post(url, null, this.getRequestHeaders()).toPromise();
