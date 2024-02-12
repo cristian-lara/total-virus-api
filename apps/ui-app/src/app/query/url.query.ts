@@ -14,12 +14,12 @@ const urlBackend = 'https://app-scan.manticore-labs.com'
 
 const scanUrl = async (data: ScanData): Promise<any> => {
   const { url } = data;
-  const response = await axios.post(urlBackend +'/api/urls/scan', { url });
+  const response = await axios.post(urlBackend +'/urls/scan', { url });
   return response.data;
 };
 
 const getUrlReport = async (idAnalysis: string): Promise<any> => {
-  const response = await axios.get(`${urlBackend}/api/urls/report/${idAnalysis}`);
+  const response = await axios.get(`${urlBackend}/urls/report/${idAnalysis}`);
   return response.data;
 };
 
@@ -28,7 +28,7 @@ export const useScanUrl = (): UseMutationResult<any, unknown, ScanData, unknown>
 };
 
 export const findOrCreateUser = async (idAuth0: string, email:string) => {
-  const response = await axios.post(urlBackend+'/api/user/find-or-create', {
+  const response = await axios.post(urlBackend+'/user/find-or-create', {
     idAuth0,
     email,
   });
@@ -44,7 +44,7 @@ export const useGetUrlReport = (idAnalysis: string, isEnabled: boolean): UseQuer
 
 export const saveReportVirus = async (reportDetails: IReportVirusData) => {
   try {
-    const response = await axios.post(`${urlBackend}/api/report-virus`, reportDetails);
+    const response = await axios.post(`${urlBackend}/report-virus`, reportDetails);
     return response.data;
   } catch (error) {
     console.error('Error saving the report:', error);
@@ -53,6 +53,6 @@ export const saveReportVirus = async (reportDetails: IReportVirusData) => {
 };
 
 export const fetchReportsByUser = async (userId: string): Promise<IReportVirusData[]> => {
-  const { data } = await axios.get(`${urlBackend}/api/report-virus/user/${userId}`);
+  const { data } = await axios.get(`${urlBackend}/report-virus/user/${userId}`);
   return data;
 };
