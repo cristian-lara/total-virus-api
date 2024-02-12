@@ -11,11 +11,21 @@ export class VirusTotalService {
   constructor(private readonly httpService: HttpService) {}
 
   // IpAdress
-  async getIpAddressReport(ipAddress: string): Promise<AxiosResponse> {
-    const url = `${this.baseURL}/ip_addresses/${ipAddress}`;
-    return this.httpService.get(url, this.getRequestHeaders()).toPromise();
+  async getIpAddressReport(ipAddress: string) {
+    const urlEndpoint = `${this.baseURL}/ip_addresses/${ipAddress}`;
+    const {data} = await firstValueFrom(
+      this.httpService.get(urlEndpoint, {
+        headers: {
+          ...this.getRequestHeaders().headers,
+          'Content-Type': 'application/json'
+        }
+      }).pipe(catchError((error: AxiosError) => {
+        console.error(error.response.data);
+        throw 'An error happened!';
+      }),)
+    )
+    return data;
   }
-
   async getCommentsOnIpAddress(ipAddress: string): Promise<AxiosResponse> {
     const url = `${this.baseURL}/ip_addresses/${ipAddress}/comments`;
     return this.httpService.get(url, this.getRequestHeaders()).toPromise();

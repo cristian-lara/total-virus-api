@@ -9,6 +9,7 @@ export class VirusTotalController {
 
   @Get('ip/:ipAddress')
   async getIpAddressDetails(@Param('ipAddress') ipAddress: string) {
+    console.log('ip', ipAddress)
     return await this.virusTotalService.getIpAddressReport(ipAddress);
   }
 
