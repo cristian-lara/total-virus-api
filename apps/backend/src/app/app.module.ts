@@ -28,7 +28,10 @@ import { ReportVirusEntity } from './report-virus/report-virus.entity';
         entities: [UserEntity, ReportVirusEntity],
         synchronize: false,
         dropSchema: false,
-        logging: false,
+        logging: true,
+        ssl: {
+          rejectUnauthorized: false
+        }
       }),
     }),
     ReportVirusModule,
