@@ -1,5 +1,5 @@
 import { Box, Button, Collapse, Grid, Paper, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { saveReportVirus, useGetUrlReport, useScanUrl } from '../../query/url.query';
@@ -9,6 +9,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { IReportVirusData } from '../../constants';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useUser } from '../UserContext';
+import StatisticsCard from '../statistics-card/statistics-card';
 
 
 /* eslint-disable-next-line */
@@ -69,6 +70,7 @@ export default function SearchSection() {
   return (
     <Box p={2}>
       <Grid container spacing={2} alignItems="center">
+        <Typography>Add an link and see if it is a safe URL</Typography>
         <Grid item xs={9} sm={10}>
           <TextField
             fullWidth
@@ -106,6 +108,13 @@ export default function SearchSection() {
             </Grid>
           </Grid>
         </Box>
+        {reportQuery.data && reportQuery.data.data && reportQuery.data.data.attributes ? (
+          <StatisticsCard stats={reportQuery.data.data.attributes.stats} />
+        ) : (
+          <Typography>No stats available</Typography>
+        )}
+
+
         <Button
           startIcon={<ExpandMoreIcon />}
           onClick={toggleDetails}

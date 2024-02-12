@@ -27,15 +27,16 @@ import { fetchReportsByUser } from '../query/url.query';
 import { useUser } from '../components/UserContext';
 import SearchSection from '../components/search-section/search-section';
 import CardAnalysisDetails from '../components/card-analisys-details/card-analisys-details';
+import StatisticsCard from '../components/statistics-card/statistics-card';
 
 /* eslint-disable-next-line */
 
 
-const Row: React.FC<{ row: IReportVirusData }> = ({ row }) => {
+const Row = ({ row }: { row: IReportVirusData }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <React.Fragment>
+    <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
           <IconButton
@@ -60,12 +61,17 @@ const Row: React.FC<{ row: IReportVirusData }> = ({ row }) => {
                 Additional Details
               </Typography>
               {/* Here you can place additional row details */}
-            <CardAnalysisDetails reportData={row.reportDetail} />
+              {row.type === 'URL' && (
+                <>
+                  <StatisticsCard stats={row.reportDetail.stats} />
+                  <CardAnalysisDetails reportData={row.reportDetail} />
+                </>
+              )}
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 };
 export default function ConsultAnalysis() {
