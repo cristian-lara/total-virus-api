@@ -28,6 +28,9 @@ import { useUser } from '../components/UserContext';
 import SearchSection from '../components/search-section/search-section';
 import CardAnalysisDetails from '../components/card-analisys-details/card-analisys-details';
 import StatisticsCard from '../components/statistics-card/statistics-card';
+import LastAnalisysStatsCard from '../components/last-analisys-stats-card/last-analisys-stats-card';
+import WhoisInfo from '../components/who-is-info/who-is-info';
+import { LastAnalisysIp } from '../components/last-analisys-ip/last-analisys-ip';
 
 /* eslint-disable-next-line */
 
@@ -65,6 +68,18 @@ const Row = ({ row }: { row: IReportVirusData }) => {
                 <>
                   <StatisticsCard stats={row.reportDetail.stats} />
                   <CardAnalysisDetails reportData={row.reportDetail} />
+                </>
+              )}
+              {row.type === 'WEB' && (
+                <>
+                  <LastAnalisysStatsCard last_analysis_stats={row.reportDetail.attributes.last_analysis_stats}
+                                         country={row.reportDetail.attributes.country}
+                                         reputation={row.reportDetail.attributes.reputation}/>
+                  <WhoisInfo whois={row.reportDetail.attributes.whois}/>
+                  <Typography variant={'h4'} sx={{marginTop: 4, marginBottom: 3}}>
+                    Last Analysis
+                  </Typography>
+                  <LastAnalisysIp last_analysis_results={row.reportDetail.attributes.last_analysis_results} />
                 </>
               )}
             </Box>

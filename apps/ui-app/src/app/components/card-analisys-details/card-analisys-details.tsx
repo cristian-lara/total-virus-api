@@ -21,6 +21,7 @@ export interface ReportData {
     timeout: number;
   };
   date: number;
+  attributes: any;
   status: string;
 }
 const ITEMS_PER_PAGE = 9;
