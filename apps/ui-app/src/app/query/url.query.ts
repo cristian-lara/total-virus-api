@@ -15,8 +15,8 @@ interface ScanData {
 interface ReportData {
   idAnalysis: string;
 }
-const urlBackend = 'http://localhost:3000'
-// const urlBackend = 'https://app-scan.manticore-labs.com'
+// const urlBackend = 'http://localhost:3000'
+const urlBackend = 'https://app-scan.manticore-labs.com'
 
 const scanUrl = async (data: ScanData): Promise<any> => {
   const { url } = data;
