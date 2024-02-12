@@ -7,7 +7,7 @@ type VirusReportType = 'URL' | 'FILE' | 'WEB';
 
 export interface IReportVirusData {
   type: VirusReportType;
-  reportDetail: ReportData | FileAnalysisDetailsResponse;
+  reportDetail: ReportData | FileAnalysisDetailsResponse | any;
   user: string;
   id?: string;
   createdAt?: string;

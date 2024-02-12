@@ -11,7 +11,7 @@ interface LastAnalysisResult {
 }
 
 export const LastAnalisysIp =  ({ last_analysis_results }:{
-  last_analysis_results: { [engine: string]: LastAnalysisResult };
+  last_analysis_results: any;
 }) => {
   const [page, setPage] = useState(1);
   const resultsPerPage = 9;
