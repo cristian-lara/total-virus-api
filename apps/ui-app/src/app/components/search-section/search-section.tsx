@@ -7,7 +7,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import CardAnalysisDetails, { ReportData } from '../card-analisys-details/card-analisys-details';
 import SaveIcon from '@mui/icons-material/Save';
 import { IReportVirusData } from '../../constants';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useUser } from '../UserContext';
 import StatisticsCard from '../statistics-card/statistics-card';
 
@@ -15,6 +14,9 @@ import StatisticsCard from '../statistics-card/statistics-card';
 /* eslint-disable-next-line */
 export default function SearchSection() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState('');
+  const [isUrlValid, setIsUrlValid] = useState<boolean>(false);
+
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [idAnalysis, setIdAnalysis] = useState('');
   const [messageRequest, setMessageRequest] = useState('');
@@ -35,8 +37,28 @@ export default function SearchSection() {
       console.error('Error saving the report:', error);
     }
   });
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const { value } = event.target;
+    setSearchTerm(value);
+    const valid = isValidUrl(value);
+    setIsUrlValid(valid);
+
+    if (value && !valid) {
+      setError('Please enter a valid URL.');
+    } else {
+      setError('');
+    }
+  };
+
+  const isValidUrl = (urlString: string): boolean => {
+    const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocolo
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // nombre de dominio
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // puerto y path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(urlString);
   };
 
   const handleSearch = () => {
@@ -71,17 +93,19 @@ export default function SearchSection() {
     <Box p={2}>
       <Grid container spacing={2} alignItems="center">
         <Typography>Add an link and see if it is a safe URL</Typography>
-        <Grid item xs={9} sm={10}>
+        <Grid item xs={10}>
           <TextField
             fullWidth
             label="Enter a URL"
             variant="outlined"
             value={searchTerm}
             onChange={handleSearchChange}
+            error={!!error}
+            helperText={error}
           />
         </Grid>
         <Grid item xs={3} sm={2}>
-          <Button disabled={!searchTerm} variant="contained" onClick={handleSearch} startIcon={<SearchIcon />}>
+          <Button  disabled={!searchTerm || !isUrlValid} variant="contained" onClick={handleSearch} startIcon={<SearchIcon />}>
             Scan URL
           </Button>
         </Grid>
