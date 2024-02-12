@@ -11,9 +11,12 @@ interface LastAnalysisStatsProps {
     undetected: number;
     harmless: number;
     timeout: number;
+    "confirmed-timeout"?: number;
+    failure: number;
+    "type-unsupported"?: number;
   };
-  country: string;
-  reputation: number;
+  country?: string;
+  reputation?: number;
 }
 
 const LastAnalysisStatsCard = ({ last_analysis_stats, country, reputation }: LastAnalysisStatsProps) => {
@@ -34,22 +37,26 @@ const LastAnalysisStatsCard = ({ last_analysis_stats, country, reputation }: Las
               </Typography>
             </Grid>
           ))}
-          <Grid item xs={4}>
-            <Typography variant="body2" color="text.secondary">
-              Country
-            </Typography>
-            <Typography variant="body1">
-              {country}
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="body2" color="text.secondary">
-              Reputation
-            </Typography>
-            <Typography variant="body1">
-              {reputation}
-            </Typography>
-          </Grid>
+          {country && reputation && (
+           <>
+             <Grid item xs={4}>
+               <Typography variant="body2" color="text.secondary">
+                 Country
+               </Typography>
+               <Typography variant="body1">
+                 {country}
+               </Typography>
+             </Grid>
+             <Grid item xs={4}>
+               <Typography variant="body2" color="text.secondary">
+                 Reputation
+               </Typography>
+               <Typography variant="body1">
+                 {reputation}
+               </Typography>
+             </Grid>
+           </>
+          )}
         </Grid>
       </CardContent>
     </Card>

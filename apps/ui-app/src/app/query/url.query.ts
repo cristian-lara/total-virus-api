@@ -1,7 +1,12 @@
 import { useMutation, useQuery, UseMutationResult, UseQueryResult } from 'react-query';
 import axios from 'axios';
 import { IReportVirusData } from '../constants';
-import { IReportIPVirusData } from '../../types';
+import {
+  AnalysisResponseFile,
+  AnalysisResponseUpload,
+  FileAnalysisDetailsResponse,
+  IReportIPVirusData
+} from '../../types';
 
 interface ScanData {
   url: string;
@@ -67,4 +72,39 @@ export const useGetIpReport = (ip: string, isEnabled: boolean): UseQueryResult<a
   return useQuery(['report-ip', ip], () => fetchReportbyIp(ip), {
     enabled: isEnabled,
   });
+};
+
+const uploadFile = async (formData: FormData): Promise<AnalysisResponseUpload> => {
+  const response = await axios.post(`${urlBackend}/files/upload`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+  });
+  return response.data;
+};
+
+const getFileReport = async (fileId: string): Promise<AnalysisResponseFile> => {
+  const response = await axios.get(`${urlBackend}/files/${fileId}`);
+  return response.data;
+};
+
+const getFileReportDetails = async (fileId: string): Promise<FileAnalysisDetailsResponse> => {
+  const response = await axios.get(`${urlBackend}/files/details/${fileId}`);
+  return response.data;
+};
+
+export const useGetFileReport = (fileId: string, isEnabled: boolean): UseQueryResult<AnalysisResponseFile, unknown> => {
+  return useQuery(['fileReport', fileId], () => getFileReport(fileId), {
+    enabled: isEnabled,
+  });
+};
+
+export const useGetFileReportDetails = (fileId: string, isEnabled: boolean): UseQueryResult<FileAnalysisDetailsResponse, unknown> => {
+  return useQuery(['fileReportDetails', fileId], () => getFileReportDetails(fileId), {
+    enabled: isEnabled,
+  });
+};
+
+export const useUploadFile = (): UseMutationResult<AnalysisResponseUpload, unknown, FormData, unknown> => {
+  return useMutation(uploadFile);
 };

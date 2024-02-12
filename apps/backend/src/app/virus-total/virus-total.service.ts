@@ -143,6 +143,21 @@ export class VirusTotalService {
     )
     return data;
   }
+  async getFileReport2(fileId: string): Promise<AxiosResponse> {
+    const urlEndpoint = `${this.baseURL}/files/${fileId}`;
+    const {data} = await firstValueFrom(
+      this.httpService.get(urlEndpoint, {
+        headers: {
+          ...this.getRequestHeaders().headers,
+          'Content-Type': 'application/json'
+        }
+      }).pipe(catchError((error: AxiosError) => {
+        console.error(error.response.data);
+        throw 'An error happened!';
+      }),)
+    )
+    return data;
+  }
   async requestFileRescan(fileId: string): Promise<AxiosResponse> {
     const url = `${this.baseURL}/files/${fileId}/analyse`;
     return this.httpService.post(url, null, this.getRequestHeaders()).toPromise();

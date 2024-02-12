@@ -3,7 +3,8 @@ import TabPanel from '../components/tab-panel/tab-panel';
 import React, { useState } from 'react';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SearchSection from '../components/search-section/search-section';
-import IpSearchSection from '../components/ip-search-section/search-section';
+import IpSearchSection from '../components/ip-search-section/ip-search-section';
+import FileSearchSection from '../components/file-search-section/file-search-section';
 
 
 /* eslint-disable-next-line */
@@ -62,7 +63,7 @@ export default function PerformReport(props: PerformReportProps) {
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
             <Tab label="URL" />
             <Tab label="Search" />
-            <Tab disabled={true}  label="File" />
+            <Tab label="File" />
           </Tabs>
         </Box>
 
@@ -74,7 +75,7 @@ export default function PerformReport(props: PerformReportProps) {
             <IpSearchSection/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Content for File tab
+            <FileSearchSection/>
           </TabPanel>
         </Box>
       </Box>

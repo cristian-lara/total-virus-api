@@ -21,6 +21,10 @@ export class FilesController {
   async getFileReport(@Param('fileId') fileId: string) {
     return await this.virusTotalService.getFileReport(fileId);
   }
+  @Get('/details/:fileId')
+  async getFileReport2(@Param('fileId') fileId: string) {
+    return await this.virusTotalService.getFileReport2(fileId);
+  }
 
   @Post(':fileId/rescan')
   @HttpCode(HttpStatus.OK)

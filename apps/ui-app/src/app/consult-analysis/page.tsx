@@ -22,15 +22,16 @@ import React, { useState } from 'react';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { KeyboardArrowUp as KeyboardArrowUpIcon, KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import { useQuery } from 'react-query';
-import { IReportVirusData } from '../constants';
+import { formatDateCustom, IReportVirusData } from '../constants';
 import { fetchReportsByUser } from '../query/url.query';
 import { useUser } from '../components/UserContext';
-import SearchSection from '../components/search-section/search-section';
 import CardAnalysisDetails from '../components/card-analisys-details/card-analisys-details';
 import StatisticsCard from '../components/statistics-card/statistics-card';
 import LastAnalisysStatsCard from '../components/last-analisys-stats-card/last-analisys-stats-card';
 import WhoisInfo from '../components/who-is-info/who-is-info';
 import { LastAnalisysIp } from '../components/last-analisys-ip/last-analisys-ip';
+import FileCard from '../components/file-card/file-card';
+import LastAnalysisStatsCard from '../components/last-analisys-stats-card/last-analisys-stats-card';
 
 /* eslint-disable-next-line */
 
@@ -54,7 +55,7 @@ const Row = ({ row }: { row: IReportVirusData }) => {
           {row.type}
         </TableCell>
         <TableCell>{row.urlSearch}</TableCell>
-        <TableCell>{row.createdAt}</TableCell>
+        <TableCell>{formatDateCustom(row.createdAt as string)}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -80,6 +81,16 @@ const Row = ({ row }: { row: IReportVirusData }) => {
                     Last Analysis
                   </Typography>
                   <LastAnalisysIp last_analysis_results={row.reportDetail.attributes.last_analysis_results} />
+                </>
+              )}
+              {row.type === 'FILE' && (
+                <>
+                  <FileCard attributes={row.reportDetail.data.attributes}/>
+                  {row.reportDetail.data.attributes.last_analysis_stats && (<LastAnalysisStatsCard last_analysis_stats={row.reportDetail.data.attributes.last_analysis_stats}/>)}
+                  <Typography variant={'h5'} sx={{marginTop: 4, marginBottom: 4}}> Last Analysis Result</Typography>
+                  {row.reportDetail.data.attributes.last_analysis_results &&
+                    (<LastAnalisysIp last_analysis_results={row.reportDetail.data.attributes.last_analysis_results}/>)
+                  }
                 </>
               )}
             </Box>
