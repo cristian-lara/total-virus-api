@@ -132,7 +132,7 @@ export default function SearchSection() {
             </Grid>
           </Grid>
         </Box>
-        {reportQuery.data && reportQuery.data.data && reportQuery.data.data.attributes ? (
+        {reportQuery.data && reportQuery.data.data && reportQuery.data.data.attributes && searchTerm ? (
           <StatisticsCard stats={reportQuery.data.data.attributes.stats} />
         ) : (
           <Typography>No stats available</Typography>
@@ -157,7 +157,7 @@ export default function SearchSection() {
             ) : reportQuery.isError ? (
               <Typography>Error: Was not possible load the details</Typography>
             ) : (
-              reportQuery.data && reportQuery.data.data && reportQuery.data.data.attributes ? (
+              reportQuery.data && reportQuery.data.data && reportQuery.data.data.attributes && searchTerm ? (
                 <CardAnalysisDetails reportData={reportQuery.data.data.attributes} />
               ) : (
                 <Typography>No data available</Typography>
