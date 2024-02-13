@@ -4,6 +4,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { saveReportVirus, useGetFileReport, useGetFileReportDetails, useUploadFile } from '../../query/url.query';
 import { useMutation, useQueryClient } from 'react-query';
 import SaveIcon from '@mui/icons-material/Save';
+import WifiTetheringIcon from '@mui/icons-material/WifiTethering';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { IReportVirusData } from '../../constants';
 import { useUser } from '../UserContext';
 import { FileAnalysisDetailsResponse } from '../../../types';
@@ -14,7 +16,9 @@ import FileCard from '../file-card/file-card';
 
 /* eslint-disable-next-line */
 export default function FileSearchSection() {
-  const [file, setFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [statusMessage, setStatusMessage] = useState("Waiting for file upload...");
+
   const [fileId, setFileId] = useState<string>('');
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [sha256, setSha256] = useState('');
@@ -46,17 +50,13 @@ export default function FileSearchSection() {
       setIsEnabledSave(true)
     }
   }, [fileReportDetailsQuery.isSuccess, fileReportDetailsQuery.data?.data.attributes]);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0]);
-    }
-  };
+
   const queryClient = useQueryClient();
 
   const saveReportMutation = useMutation(saveReportVirus, {
     onSuccess: () => {
       queryClient.invalidateQueries('reportQueryKey');
-      setFile(null);
+      setSelectedFile(null);
       setFileId('');
       setSha256('');
       setIsEnabledSave(false);
@@ -66,9 +66,9 @@ export default function FileSearchSection() {
     }
   });
   const handleUpload = () => {
-    if (file) {
+    if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', selectedFile);
       uploadFileMutation.mutate(formData);
     }
   };
@@ -77,16 +77,26 @@ export default function FileSearchSection() {
     setDetailsOpen(!detailsOpen);
   };
 
-  let statusMessage = "Waiting for file upload...";
-  if (uploadFileMutation.data) {
-    statusMessage = "File is being analyzed...";
-  }
-  if (fileReportQuery.isSuccess) {
-    statusMessage = "Performing analysis...";
-  }
-  if (fileReportDetailsQuery.data && fileReportDetailsQuery.data?.data.attributes.last_analysis_results) {
-    statusMessage = "Analysis completed.";
-  }
+  useEffect(() => {
+    if (selectedFile === null) {
+      setStatusMessage('Waiting for file upload...');
+    } else if (selectedFile) {
+      setStatusMessage("File was uploaded...");
+    }
+
+    if (uploadFileMutation.data && selectedFile) {
+      setStatusMessage("File is being analyzed...");
+    }
+
+    if (fileReportQuery.isSuccess) {
+      setStatusMessage("Performing analysis...");
+    }
+
+    if (fileReportDetailsQuery.data && fileReportDetailsQuery.data?.data.attributes.last_analysis_results) {
+      setStatusMessage("Analysis completed.");
+    }
+  }, [selectedFile, uploadFileMutation.data, fileReportQuery.isSuccess, fileReportDetailsQuery.data]);
+
   const handleSaveReport = (reportDetails: FileAnalysisDetailsResponse) => {
     const dataReport: IReportVirusData = {
       reportDetail: reportDetails,
@@ -99,21 +109,44 @@ export default function FileSearchSection() {
   return (
     <Box p={2}>
       <Grid container spacing={2} alignItems="center">
-        <Typography>Upload a file to analyze</Typography>
-        <Grid item xs={9} sm={10}>
+       <Grid item xs={12} sm={12}>
+         <Typography>Upload a file to analyze</Typography>
+       </Grid>
+        <Grid item xs={12} sm={6} md={4}>
           <input
+            accept="*/*" // Ajusta esto según los tipos de archivo que desees aceptar
+            style={{ display: 'none' }}
+            id="raised-button-file"
             type="file"
-            onChange={handleFileChange}
+            onChange={(event)=> {
+              if (event.target.files) {
+                setSelectedFile(event.target.files[0]);
+              }
+            }}
           />
+          <label htmlFor="raised-button-file">
+            <Button
+              variant="contained"
+              component="span"
+              startIcon={<CloudUploadIcon />}
+              fullWidth
+            >
+              Upload File
+            </Button>
+          </label>
+          {selectedFile && (
+            <p style={{ textAlign: 'center' }}>{selectedFile.name}</p>
+          )}
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid item xs={3} sm={4}>
           <Button
             variant="contained"
+            color={'success'}
             onClick={handleUpload}
-            disabled={!file}
-            startIcon={<SaveIcon />}
+            disabled={!selectedFile}
+            startIcon={<WifiTetheringIcon />}
           >
-            Upload File
+            Scan File
           </Button>
         </Grid>
       </Grid>
